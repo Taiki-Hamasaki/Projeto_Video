@@ -8,13 +8,14 @@ package visual;
 import Modelo.Usuario;
 import java.awt.Dimension;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author 70670989630
  */
 public class FormPrincipal extends javax.swing.JFrame {
-    static Usuario usuarioLogado;
+    static Usuario usuarioLogado = null;
     /**
      * Creates new form Main
      */
@@ -37,9 +38,13 @@ public class FormPrincipal extends javax.swing.JFrame {
         menuCadastro = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        menuSair = new javax.swing.JMenu();
         menuAjuda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Projeto_Videos");
 
         javax.swing.GroupLayout painelGeralLayout = new javax.swing.GroupLayout(painelGeral);
         painelGeral.setLayout(painelGeralLayout);
@@ -70,7 +75,53 @@ public class FormPrincipal extends javax.swing.JFrame {
         });
         menuCadastro.add(jMenuItem2);
 
+        jMenuItem3.setText("Novo Canal");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenuItem3.setVisible(false);
+        menuCadastro.add(jMenuItem3);
+
+        jMenuItem4.setText("Novo vídeo");
+        jMenuItem4.setVisible(false);
+        menuCadastro.add(jMenuItem4);
+
         jMenuBar1.add(menuCadastro);
+
+        menuSair.setText("Sair");
+        menuSair.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
+            public void menuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
+                menuSairMenuKeyPressed(evt);
+            }
+            public void menuKeyReleased(javax.swing.event.MenuKeyEvent evt) {
+            }
+            public void menuKeyTyped(javax.swing.event.MenuKeyEvent evt) {
+            }
+        });
+        menuSair.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuSairMouseClicked(evt);
+            }
+        });
+        menuSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSairActionPerformed(evt);
+            }
+        });
+        menuSair.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                menuSairKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                menuSairKeyTyped(evt);
+            }
+        });
+
+        menuSair.setVisible(false);
+
+        jMenuBar1.add(menuSair);
 
         menuAjuda.setText("Ajuda");
         jMenuBar1.add(menuAjuda);
@@ -107,7 +158,48 @@ public class FormPrincipal extends javax.swing.JFrame {
         logIn.setResizable(false);
         logIn.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         logIn.setVisible(true);
+        
+        if(usuarioLogado != null) {
+            jMenuItem1.setVisible(false);
+            jMenuItem2.setVisible(false);
+            jMenuItem3.setVisible(true);
+            jMenuItem4.setVisible(true);
+            menuSair.setVisible(true);
+        }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSairActionPerformed
+        
+    }//GEN-LAST:event_menuSairActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        FormCanal fmCanal = new FormCanal(this, true);
+        fmCanal.setLocationRelativeTo(null);
+        fmCanal.setResizable(false);
+        fmCanal.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        fmCanal.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void menuSairKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_menuSairKeyPressed
+        
+    }//GEN-LAST:event_menuSairKeyPressed
+
+    private void menuSairKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_menuSairKeyTyped
+        
+    }//GEN-LAST:event_menuSairKeyTyped
+
+    private void menuSairMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_menuSairMenuKeyPressed
+
+    }//GEN-LAST:event_menuSairMenuKeyPressed
+
+    private void menuSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSairMouseClicked
+        int opcao = JOptionPane.showOptionDialog(null, "Deseja realmente sair?", "Pergunta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, new String[] {"Sim", "Não"}, "Sim");
+        
+        if(opcao == 0) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_menuSairMouseClicked
 
     /**
      * @param args the command line arguments
@@ -149,8 +241,11 @@ public class FormPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenu menuAjuda;
     private javax.swing.JMenu menuCadastro;
+    private javax.swing.JMenu menuSair;
     private javax.swing.JPanel painelGeral;
     // End of variables declaration//GEN-END:variables
 }
