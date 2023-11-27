@@ -2,10 +2,22 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <NonVisualComponents>
+    <Component class="java.util.List" name="listVideos">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList&lt;Video&gt;())"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Video&gt;"/>
+      </AuxValues>
+    </Component>
     <Component class="java.util.List" name="listCanais">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList&lt;Canal&gt;())"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Canal&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="java.util.List" name="listGeneros">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList&lt;Genero&gt;())"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Genero&gt;"/>
       </AuxValues>
     </Component>
   </NonVisualComponents>
@@ -172,49 +184,26 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblCanais">
-                  <Properties>
-                    <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                      <TableColumnModel selectionModel="0">
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
-                      </TableColumnModel>
-                    </Property>
-                    <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                      <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
-                    </Property>
-                  </Properties>
+                <Component class="javax.swing.JTable" name="tblVideos">
                   <BindingProperties>
-                    <BindingProperty name="elements" source="listCanais" target="tblCanais" targetPath="elements" updateStrategy="0" immediately="true">
-                      <Subbinding sourcePath="${codCanal}">
+                    <BindingProperty name="elements" source="listVideos" target="tblVideos" targetPath="elements" updateStrategy="0" immediately="true">
+                      <Subbinding sourcePath="${codVideo}">
                         <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
                       </Subbinding>
-                      <Subbinding sourcePath="${nomeCanal}">
+                      <Subbinding sourcePath="${tituloVideo}">
                         <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                       </Subbinding>
-                      <Subbinding sourcePath="${descricaoCanal}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
+                      <Subbinding sourcePath="${numCurtidas}">
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
                       </Subbinding>
-                      <Subbinding sourcePath="${donoCanal}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Modelo.Usuario.class"/>
+                      <Subbinding sourcePath="${visualizacoes}">
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${generoVideo}">
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Modelo.Genero.class"/>
+                      </Subbinding>
+                      <Subbinding sourcePath="${donoVideo}">
+                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Modelo.Canal.class"/>
                       </Subbinding>
                     </BindingProperty>
                   </BindingProperties>
@@ -330,11 +319,10 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtDescricao" alignment="0" min="-2" pref="648" max="-2" attributes="0"/>
-                              <Component id="txtCodCanal" alignment="0" min="-2" pref="98" max="-2" attributes="0"/>
-                              <Component id="txtNome" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
+                              <Component id="txtCodVideo" alignment="0" min="-2" pref="98" max="-2" attributes="0"/>
+                              <Component id="txtTituloVideo" alignment="0" min="-2" pref="271" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="389" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -342,23 +330,21 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtCodCanal" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCodVideo" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-                          <Component id="txtNome" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="23" max="32767" attributes="0"/>
-                          <Component id="txtDescricao" min="-2" pref="118" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                          <Component id="txtTituloVideo" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="168" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JTextField" name="txtCodCanal">
+                <Component class="javax.swing.JTextField" name="txtCodVideo">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                        <TitledBorder title="Cod Canal">
+                        <TitledBorder title="Cod Video">
                           <Font PropertyName="font" name="Dialog" size="12" style="1"/>
                           <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
                         </TitledBorder>
@@ -366,17 +352,12 @@
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="text" source="tblCanais" sourcePath="${selectedElement.nomeCanal}" target="txtCodCanal" targetPath="text" updateStrategy="0" immediately="false">
-                      <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                    </BindingProperty>
-                  </BindingProperties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtNome">
+                <Component class="javax.swing.JTextField" name="txtTituloVideo">
                   <Properties>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                        <TitledBorder title="Nome do Canal">
+                        <TitledBorder title="T&#xed;tulo do V&#xed;deo">
                           <Font PropertyName="font" name="Dialog" size="12" style="1"/>
                           <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
                         </TitledBorder>
@@ -384,26 +365,7 @@
                     </Property>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="text" source="tblCanais" sourcePath="${selectedElement.nomeCanal}" target="txtNome" targetPath="text" updateStrategy="0" immediately="false">
-                      <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                    </BindingProperty>
-                  </BindingProperties>
-                </Component>
-                <Component class="javax.swing.JTextArea" name="txtDescricao">
-                  <Properties>
-                    <Property name="columns" type="int" value="20"/>
-                    <Property name="rows" type="int" value="4"/>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                        <TitledBorder title="Descri&#xe7;&#xe3;o">
-                          <Font PropertyName="font" name="Dialog" size="12" style="1"/>
-                          <Color PropertyName="color" blue="0" green="0" red="0" type="rgb"/>
-                        </TitledBorder>
-                      </Border>
-                    </Property>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="text" source="tblCanais" sourcePath="${selectedElement.descricaoCanal}" target="txtDescricao" targetPath="text" updateStrategy="0" immediately="false">
+                    <BindingProperty name="text" source="tblVideos" sourcePath="${selectedElement.nomeCanal}" target="txtTituloVideo" targetPath="text" updateStrategy="0" immediately="false">
                       <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                     </BindingProperty>
                   </BindingProperties>

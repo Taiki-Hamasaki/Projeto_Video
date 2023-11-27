@@ -21,10 +21,10 @@ import javax.swing.JOptionPane;
  */
 public class DAOVideo {
     
-    static DAOGenero daoGenero = new DAOGenero();
-    static DAOCanal daocanal = new DAOCanal();
+     DAOGenero daoGenero = new DAOGenero();
+     DAOCanal daocanal = new DAOCanal();
     
-    public static List<Video> getLista() {
+    public  List<Video> getLista() {
         String sql = "SELECT * FROM video";
         List<Video> listaVideo = new ArrayList<>();
         try {
@@ -123,7 +123,7 @@ public class DAOVideo {
     }
     
     
-    public static Video localizar(Integer id) {
+    public  Video localizar(Integer id) {
         String sql = "SELECT * FROM video WHERE codVideo = ?";
         Video objVideo = new Video();
         try {
@@ -145,7 +145,53 @@ public class DAOVideo {
         return objVideo;
     }
     
-    public static void main(String[] args) {
-        System.out.println(localizar(1).getTituloVideo());
+    public List<Video> pesquisa(String pesquisa) {
+        List<Video> resultadoPesquisa = new ArrayList<>();
+        Video video = new Video();
+        int codigo = 0;
+        String sql = "SELECT * FROM video AS V WHERE ";
+        // para continuar com a filtragem de dados
+        String continuaSQL = "";
+        // Uma maneira de verificar se a pesquisa eh um valor numerico != 0
+        boolean pesquisaEhZero = false;
+        try{
+            pesquisaEhZero = Integer.parseInt(pesquisa) == 0 ? true : false;
+            codigo = Integer.parseInt(pesquisa);
+            // continuaSQL = "codUsuario LIKE \"%?\" OR codUsuario LIKE ? OR codUsuario LIKE \"%?%\"";
+            continuaSQL = "(codVideo = ? OR codVideo = ? OR codVideo = ?)";
+        } catch(NumberFormatException e) {
+            // ... WHERE nomeCanal LIKE "%string" OR nomeCanal LIKE "string%"
+            continuaSQL = "(V.tituloVideo LIKE ? OR V.tituloVideo LIKE ? OR V.tituloVideo LIKE ?)";
+        }
+        sql += continuaSQL;
+        
+        try {
+            PreparedStatement pst = Conexao.getPreparedStatement(sql);
+            if( (codigo != 0 && !(pesquisaEhZero)) || (codigo == 0 && (pesquisaEhZero))  ) {
+                pst.setString(1, pesquisa + "%");
+                pst.setString(2, "%" + pesquisa);
+                pst.setString(3, "%" + pesquisa + "%");
+            } else {
+                pst.setString(1, pesquisa + "%");
+                pst.setString(2, "%" + pesquisa);
+                pst.setString(3, "%" + pesquisa + "%");
+            }
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()) {
+                video.setCodVideo(rs.getInt("codVideo"));
+                video.setTituloVideo(rs.getString("tituloVideo"));
+                video.setNumCurtidas(rs.getInt("numeroCurtidas"));
+                video.setVisualizacoes(rs.getInt("visualizacoes"));
+                video.setGeneroVideo(daoGenero.localizar(rs.getInt("genero_codCategoria")));
+                video.setDonoVideo(daocanal.localizar(rs.getInt("canal_codCanal")));
+                
+                resultadoPesquisa.add(video);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro de SQL no método pesquisa da classe DAOVideo\n" + Errors.getStackTraceFormatted(e));
+            return null;
+        }
+        return resultadoPesquisa;
     }
 }

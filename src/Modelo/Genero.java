@@ -73,5 +73,12 @@ public class Genero implements Serializable{
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return tipoGenero;
+    }
+    
+    
 }
 

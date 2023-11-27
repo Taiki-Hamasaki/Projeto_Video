@@ -6,6 +6,7 @@
 package Conexao;
 
 import Modelo.Canal;
+import Modelo.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,9 +19,9 @@ import javax.swing.JOptionPane;
  * @author 70670989630
  */
 public class DAOCanal {
-    private DAOUsuario daoUsuario = new DAOUsuario();
+    private  DAOUsuario daoUsuario = new DAOUsuario();
     
-    public List<Canal> getLista(int id) {
+    public  List<Canal> getLista(int id) {
         String sql = "SELECT C.codCanal, C.nomeCanal, C.descricaoCanal, U.codusuario FROM canal AS C INNER JOIN channelowner AS CO INNER JOIN usuario AS U WHERE C.codCanal = CO.canal_codCanal AND U.codusuario = CO.usuario_codusuario AND U.codUsuario = ?";
         List<Canal> listaCanal = new ArrayList<>();
         try {
@@ -50,7 +51,7 @@ public class DAOCanal {
         }
     }
     
-    public boolean incluir(Canal objCanal) {
+    public  boolean incluir(Canal objCanal) {
         boolean retorno = false;
         String sql = "INSERT INTO canal (nomeCanal, descricaoCanal) VALUES(?, ?)";
         String sql2 = "INSERT INTO channelowner (canal_codCanal, usuario_codusuario) VALUES (?, ?)";
@@ -68,9 +69,9 @@ public class DAOCanal {
                 retorno = false;
             }
             
-            pst = Conexao.getPreparedStatement(sql2);
-            pst.setInt(1, objCanal.getDonoCanal().getCodUsuario());
-            pst.setInt(2, objCanal.getCodCanal());
+            PreparedStatement pst2 = Conexao.getPreparedStatement(sql2);
+            pst2.setInt(1, objCanal.getCodCanal());
+            pst2.setInt(2, objCanal.getDonoCanal().getCodUsuario());
             
             if(pst.executeUpdate() > 0) {
                 JOptionPane.showMessageDialog(null, "Relacionamento cadastrado com sucesso!");
@@ -81,6 +82,7 @@ public class DAOCanal {
             }
             
         } catch(SQLException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro de SQL no método incluir da classe DAOCanal\n" + Errors.getStackTraceFormatted(e));
             retorno = false;
         }

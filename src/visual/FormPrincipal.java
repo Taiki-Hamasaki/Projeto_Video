@@ -5,6 +5,8 @@
  */
 package visual;
 
+import Conexao.DAOCanal;
+import Conexao.DAOUsuario;
 import Modelo.Usuario;
 import java.awt.Dimension;
 import javax.swing.JDialog;
@@ -15,13 +17,21 @@ import javax.swing.JOptionPane;
  * @author 70670989630
  */
 public class FormPrincipal extends javax.swing.JFrame {
-    static Usuario usuarioLogado = null;
+    static DAOUsuario dao = new DAOUsuario();
+    static Usuario usuarioLogado = dao.localizar(4);
     /**
      * Creates new form Main
      */
     public FormPrincipal() {
         initComponents();
         setLocationRelativeTo(null);
+        if(usuarioLogado != null) {
+            jMenuItem1.setVisible(false);
+            jMenuItem2.setVisible(false);
+            jMenuItem3.setVisible(true);
+            jMenuItem4.setVisible(true);
+            menuSair.setVisible(true);
+        }
     }
 
     /**

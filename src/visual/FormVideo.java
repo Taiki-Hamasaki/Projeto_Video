@@ -6,9 +6,12 @@
 package visual;
 
 import Conexao.DAOCanal;
-import Conexao.DAOUsuario;
+import Conexao.DAOGenero;
+import Conexao.DAOVideo;
 import Modelo.Canal;
+import Modelo.Genero;
 import Modelo.Usuario;
+import Modelo.Video;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -16,36 +19,38 @@ import javax.swing.JOptionPane;
  *
  * @author 70670989630
  */
-public class FormCanal extends javax.swing.JDialog {
-    DAOUsuario daoUsuario = new DAOUsuario();
+public class FormVideo extends javax.swing.JDialog {
+    DAOGenero daoGenero = new DAOGenero();
     DAOCanal daoCanal = new DAOCanal();
+    DAOVideo daoVideo = new DAOVideo();
     /**
      * Creates new form CadastroUsuario
      */
-    public FormCanal(java.awt.Frame parent, boolean modal) {
+    public FormVideo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         atualizaTabela();
+        listCanais.clear();
+        listVideos.addAll(daoVideo.getLista());
         trataEdicao(false);
     }
     
     public void atualizaTabela() {
-        listCanais.clear();
-        listCanais.addAll(daoCanal.getLista(FormPrincipal.usuarioLogado.getCodUsuario()));
+        listVideos.clear();
+        listVideos.addAll(daoVideo.getLista());
         //listCanais.addAll(daoCanal.getLista(1));
-        int linha = listCanais.size()-1;
+        int linha = listVideos.size()-1;
         if(linha >= 0) {
-            tblCanais.setRowSelectionInterval(linha, linha);
-            tblCanais.scrollRectToVisible(tblCanais.getCellRect(linha, linha, true));
+            tblVideos.setRowSelectionInterval(linha, linha);
+            tblVideos.scrollRectToVisible(tblVideos.getCellRect(linha, linha, true));
         } else {
             btnPrimeiro.setEnabled(false);
             btnAnterior.setEnabled(false);
             btnProximo.setEnabled(false);
             btnUltimo.setEnabled(false);
             
-            txtCodCanal.setText("");
-            txtNome.setText("");
-            txtDescricao.setText("");
+            txtCodVideo.setText("");
+            txtTituloVideo.setText("");
             // Limpar caixa de pesquisa
             txtPesquisa.setText("");
         }
@@ -61,7 +66,7 @@ public class FormCanal extends javax.swing.JDialog {
         btnAnterior.setEnabled(!editando);
         btnUltimo.setEnabled(!editando);
         
-        int linha = listCanais.size() - 1;
+        int linha = listVideos.size() - 1;
         if(linha < 0) {
             btnPrimeiro.setEnabled(false);
             btnProximo.setEnabled(false);
@@ -69,9 +74,8 @@ public class FormCanal extends javax.swing.JDialog {
             btnUltimo.setEnabled(false);
             btnEditar.setEnabled(false);
             
-            txtCodCanal.setText("");
-            txtNome.setText("");
-            txtDescricao.setText("");
+            txtCodVideo.setText("");
+            txtTituloVideo.setText("");
             // Limpar caixa de pesquisa
             txtPesquisa.setText("");
         } else {
@@ -80,16 +84,15 @@ public class FormCanal extends javax.swing.JDialog {
         btnNovo.setEnabled(!editando);
         btnSair.setEnabled(!editando);
         
-        txtCodCanal.setEnabled(editando);
-        txtNome.setEnabled(editando);
-        txtDescricao.setEnabled(editando);
-        tblCanais.setEnabled(editando);
+        txtCodVideo.setEnabled(editando);
+        txtTituloVideo.setEnabled(editando);
+        tblVideos.setEnabled(editando);
     }
     
     public boolean validaCampos() {
-        if(!(txtNome.getText().length() > 0)) {
+        if(!(txtTituloVideo.getText().length() > 0)) {
             JOptionPane.showMessageDialog(null, "Por favor insira uma identificação do Canal");
-            txtNome.requestFocus();
+            txtTituloVideo.requestFocus();
             return false;
         }
         return true;
@@ -106,7 +109,9 @@ public class FormCanal extends javax.swing.JDialog {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        listVideos = org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList<Video>());
         listCanais = org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList<Canal>());
+        listGeneros = org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList<Genero>());
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -118,7 +123,7 @@ public class FormCanal extends javax.swing.JDialog {
         jPanel5 = new javax.swing.JPanel();
         txtPesquisa = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblCanais = new javax.swing.JTable();
+        tblVideos = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         btnNovo = new javax.swing.JButton();
@@ -127,9 +132,8 @@ public class FormCanal extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
-        txtCodCanal = new javax.swing.JTextField();
-        txtNome = new javax.swing.JTextField();
-        txtDescricao = new javax.swing.JTextArea();
+        txtCodVideo = new javax.swing.JTextField();
+        txtTituloVideo = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Novo Usuário");
@@ -210,22 +214,29 @@ public class FormCanal extends javax.swing.JDialog {
             .addComponent(txtPesquisa, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
         );
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listCanais, tblCanais);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${codCanal}"));
-        columnBinding.setColumnName("Cod Canal");
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listVideos, tblVideos);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${codVideo}"));
+        columnBinding.setColumnName("Cod Video");
         columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nomeCanal}"));
-        columnBinding.setColumnName("Nome Canal");
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${tituloVideo}"));
+        columnBinding.setColumnName("Titulo Video");
         columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${descricaoCanal}"));
-        columnBinding.setColumnName("Descricao Canal");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${donoCanal}"));
-        columnBinding.setColumnName("Dono Canal");
-        columnBinding.setColumnClass(Modelo.Usuario.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${numCurtidas}"));
+        columnBinding.setColumnName("Num Curtidas");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${visualizacoes}"));
+        columnBinding.setColumnName("Visualizacoes");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${generoVideo}"));
+        columnBinding.setColumnName("Genero Video");
+        columnBinding.setColumnClass(Modelo.Genero.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${donoVideo}"));
+        columnBinding.setColumnName("Dono Video");
+        columnBinding.setColumnClass(Modelo.Canal.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
-        jScrollPane1.setViewportView(tblCanais);
+
+        jScrollPane1.setViewportView(tblVideos);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -294,23 +305,13 @@ public class FormCanal extends javax.swing.JDialog {
         });
         jPanel3.add(btnSalvar);
 
-        txtCodCanal.setEditable(false);
-        txtCodCanal.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cod Canal", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
-        txtCodCanal.setEnabled(false);
+        txtCodVideo.setEditable(false);
+        txtCodVideo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cod Video", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        txtCodVideo.setEnabled(false);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblCanais, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.nomeCanal}"), txtCodCanal, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
+        txtTituloVideo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Título do Vídeo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
-        txtNome.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nome do Canal", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblCanais, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.nomeCanal}"), txtNome, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        txtDescricao.setColumns(20);
-        txtDescricao.setRows(4);
-        txtDescricao.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Descrição", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblCanais, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.descricaoCanal}"), txtDescricao, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, new javax.swing.JTable(), org.jdesktop.beansbinding.ELProperty.create("${selectedElement.nomeCanal}"), txtTituloVideo, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -320,21 +321,18 @@ public class FormCanal extends javax.swing.JDialog {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 648, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodCanal, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtCodVideo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTituloVideo, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(389, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtCodCanal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCodVideo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44)
-                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addComponent(txtTituloVideo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(168, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -379,9 +377,9 @@ public class FormCanal extends javax.swing.JDialog {
                 "Pergunta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                 null, new String[]{"Sim", "Não"}, "Sim");
         if (opcao == 0) {
-            int linhaSelecionada = tblCanais.getSelectedRow();
-            Canal objCanal = listCanais.get(linhaSelecionada);
-            daoCanal.remover(objCanal);
+            int linhaSelecionada = tblVideos.getSelectedRow();
+            Video objVideo = listVideos.get(linhaSelecionada);
+            daoVideo.remover(objVideo);
             atualizaTabela();
             trataEdicao(false);
         }
@@ -389,9 +387,9 @@ public class FormCanal extends javax.swing.JDialog {
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         // TODO add your handling code here:
-        listCanais.add(new Canal());
-        int linha = listCanais.size() - 1;
-        tblCanais.setRowSelectionInterval(linha, linha);
+        listVideos.add(new Video());
+        int linha = listVideos.size() - 1;
+        tblVideos.setRowSelectionInterval(linha, linha);
 
         trataEdicao(true);
     }//GEN-LAST:event_btnNovoActionPerformed
@@ -410,41 +408,41 @@ public class FormCanal extends javax.swing.JDialog {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         if(validaCampos()) {
-            int linhaSelecionada = tblCanais.getSelectedRow();
-            Canal channel = listCanais.get(linhaSelecionada);
-            daoCanal.incluir(channel);
+            int linhaSelecionada = tblVideos.getSelectedRow();
+            Video video = listVideos.get(linhaSelecionada);
+            daoVideo.incluir(video);
             atualizaTabela();
             trataEdicao(false);
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnPrimeiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrimeiroActionPerformed
-        tblCanais.setRowSelectionInterval(0, 0);
-        tblCanais.scrollRectToVisible(tblCanais.getCellRect(0, 0, true));
+        tblVideos.setRowSelectionInterval(0, 0);
+        tblVideos.scrollRectToVisible(tblVideos.getCellRect(0, 0, true));
     }//GEN-LAST:event_btnPrimeiroActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
-        int linha = tblCanais.getSelectedRow();
+        int linha = tblVideos.getSelectedRow();
         if ((linha - 1) >= 0) {
             linha--; // linha = linha -1;
         }
-        tblCanais.setRowSelectionInterval(linha, linha);
-        tblCanais.scrollRectToVisible(tblCanais.getCellRect(linha, linha, true));
+        tblVideos.setRowSelectionInterval(linha, linha);
+        tblVideos.scrollRectToVisible(tblVideos.getCellRect(linha, linha, true));
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
     private void btnProximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProximoActionPerformed
-        int linha = tblCanais.getSelectedRow();
-        if ((linha + 1) <= (tblCanais.getRowCount() - 1)) {
+        int linha = tblVideos.getSelectedRow();
+        if ((linha + 1) <= (tblVideos.getRowCount() - 1)) {
             linha++; // linha = linha +1;
         }
-        tblCanais.setRowSelectionInterval(linha, linha);
-        tblCanais.scrollRectToVisible(tblCanais.getCellRect(linha, linha, true));
+        tblVideos.setRowSelectionInterval(linha, linha);
+        tblVideos.scrollRectToVisible(tblVideos.getCellRect(linha, linha, true));
     }//GEN-LAST:event_btnProximoActionPerformed
 
     private void btnUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimoActionPerformed
-        int linha = tblCanais.getRowCount() - 1;
-        tblCanais.setRowSelectionInterval(linha, linha);
-        tblCanais.scrollRectToVisible(tblCanais.getCellRect(linha, linha, true));
+        int linha = tblVideos.getRowCount() - 1;
+        tblVideos.setRowSelectionInterval(linha, linha);
+        tblVideos.scrollRectToVisible(tblVideos.getCellRect(linha, linha, true));
     }//GEN-LAST:event_btnUltimoActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
@@ -465,12 +463,12 @@ public class FormCanal extends javax.swing.JDialog {
 
     private void txtPesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaKeyReleased
         if(txtPesquisa.getText().length() > 0) {
-            listCanais.clear();
-            listCanais.addAll(daoCanal.pesquisa(txtPesquisa.getText()));
-            int linha = listCanais.size()-1;
+            listVideos.clear();
+            listVideos.addAll(daoVideo.pesquisa(txtPesquisa.getText()));
+            int linha = listVideos.size()-1;
             if(linha >= 0) {
-                tblCanais.setRowSelectionInterval(linha, linha);
-                tblCanais.scrollRectToVisible(tblCanais.getCellRect(linha, linha, true));
+                tblVideos.setRowSelectionInterval(linha, linha);
+                tblVideos.scrollRectToVisible(tblVideos.getCellRect(linha, linha, true));
             }
         } else {
             atualizaTabela();
@@ -494,20 +492,20 @@ public class FormCanal extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormCanal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormVideo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormCanal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormVideo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormCanal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormVideo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormCanal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormVideo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FormCanal dialog = new FormCanal(new javax.swing.JFrame(), true);
+                FormVideo dialog = new FormVideo(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -539,11 +537,12 @@ public class FormCanal extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private java.util.List<Canal> listCanais;
-    private javax.swing.JTable tblCanais;
-    private javax.swing.JTextField txtCodCanal;
-    private javax.swing.JTextArea txtDescricao;
-    private javax.swing.JTextField txtNome;
+    private java.util.List<Genero> listGeneros;
+    private java.util.List<Video> listVideos;
+    private javax.swing.JTable tblVideos;
+    private javax.swing.JTextField txtCodVideo;
     private javax.swing.JTextField txtPesquisa;
+    private javax.swing.JTextField txtTituloVideo;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

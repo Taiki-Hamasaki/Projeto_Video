@@ -93,6 +93,11 @@ public class Video implements Serializable {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return tituloVideo;
+    }
     
     
     
