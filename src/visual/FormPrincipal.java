@@ -17,8 +17,8 @@ import javax.swing.JOptionPane;
  * @author 70670989630
  */
 public class FormPrincipal extends javax.swing.JFrame {
-    static DAOUsuario dao = new DAOUsuario();
-    static Usuario usuarioLogado = dao.localizar(4);
+    DAOUsuario dao = new DAOUsuario();
+    static Usuario usuarioLogado = null;
     /**
      * Creates new form Main
      */
@@ -96,6 +96,11 @@ public class FormPrincipal extends javax.swing.JFrame {
 
         jMenuItem4.setText("Novo vídeo");
         jMenuItem4.setVisible(false);
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         menuCadastro.add(jMenuItem4);
 
         jMenuBar1.add(menuCadastro);
@@ -168,7 +173,7 @@ public class FormPrincipal extends javax.swing.JFrame {
         logIn.setResizable(false);
         logIn.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         logIn.setVisible(true);
-        
+        System.out.println(usuarioLogado.getCodUsuario());
         if(usuarioLogado != null) {
             jMenuItem1.setVisible(false);
             jMenuItem2.setVisible(false);
@@ -210,6 +215,14 @@ public class FormPrincipal extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_menuSairMouseClicked
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        FormVideo fv = new FormVideo(this, true);
+        fv.setLocationRelativeTo(null);
+        fv.setResizable(false);
+        fv.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        fv.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -69,10 +69,14 @@ public class DAOCanal {
                 retorno = false;
             }
             
-            PreparedStatement pst2 = Conexao.getPreparedStatement(sql2);
-            pst2.setInt(1, objCanal.getCodCanal());
-            pst2.setInt(2, objCanal.getDonoCanal().getCodUsuario());
-            
+            pst = Conexao.getPreparedStatement(sql2);
+            PreparedStatement pst2 = Conexao.getPreparedStatement("SELECT LAST_INSERT_ID() FROM usuario");
+            ResultSet rs = pst2.executeQuery();
+            if(rs.next()) {
+                pst.setInt(1, rs.getInt("LAST_INSERT_ID()"));
+                pst.setInt(2, objCanal.getDonoCanal().getCodUsuario());
+            }
+                
             if(pst.executeUpdate() > 0) {
                 JOptionPane.showMessageDialog(null, "Relacionamento cadastrado com sucesso!");
                 retorno = true;
@@ -142,7 +146,7 @@ public class DAOCanal {
     }
     
     
-    public Canal localizar(Integer id) {
+    public  Canal localizar(Integer id) {
         //
         String sql = "SELECT  C.codCanal, C.nomeCanal, C.descricaoCanal, U.codusuario FROM canal AS C INNER JOIN channelowner AS CO INNER JOIN usuario AS U WHERE C.codCanal = CO.canal_codCanal AND U.codusuario = CO.usuario_codusuario AND C.codCanal = ?";
         Canal objCanal = new Canal();

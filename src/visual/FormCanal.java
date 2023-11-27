@@ -412,6 +412,13 @@ public class FormCanal extends javax.swing.JDialog {
         if(validaCampos()) {
             int linhaSelecionada = tblCanais.getSelectedRow();
             Canal channel = listCanais.get(linhaSelecionada);
+            if(channel.getDonoCanal() == null) {
+                channel.setDonoCanal(new Usuario());
+                channel.getDonoCanal().setCodUsuario(FormPrincipal.usuarioLogado.getCodUsuario());
+                channel.getDonoCanal().setNomeUsuario(FormPrincipal.usuarioLogado.getNomeUsuario());
+                channel.getDonoCanal().setEmail(FormPrincipal.usuarioLogado.getEmail());
+                channel.getDonoCanal().setSenha(FormPrincipal.usuarioLogado.getSenha());
+            }
             daoCanal.incluir(channel);
             atualizaTabela();
             trataEdicao(false);

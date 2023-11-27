@@ -184,15 +184,13 @@ public class Login extends javax.swing.JDialog {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         int opcao = JOptionPane.showOptionDialog(null, "Cadastrar usuário ou sair?", "Pergunta",
-            JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Sign In", "Sair"}, "Sign In");
+            JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Sign In", "Continuar"}, "Sign In");
         if(opcao == 0) {
             dispose();
             CadastroUsuario cadUser = new CadastroUsuario(null, true);
             cadUser.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
             cadUser.setLocationRelativeTo(null);
             cadUser.setVisible(true);
-        } else {
-            dispose();
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
 

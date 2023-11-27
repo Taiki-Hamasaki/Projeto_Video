@@ -40,6 +40,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Novo v&#xed;deo"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem4ActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem4.setVisible(false);"/>
               </AuxValues>
