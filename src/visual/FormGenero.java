@@ -122,12 +122,13 @@ public class FormGenero extends javax.swing.JDialog {
         jPanel5 = new javax.swing.JPanel();
         txtCodGenero = new javax.swing.JTextField();
         txtTipoGenero = new javax.swing.JTextField();
-        cbxTipoPublico = new javax.swing.JComboBox<>();
-        cbxIdadePublico = new javax.swing.JComboBox<>();
+        cbxTipoPublico = new javax.swing.JComboBox<String>();
+        cbxIdadePublico = new javax.swing.JComboBox<String>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Novo Gênero");
 
-        jPanel4.setLayout(new java.awt.GridLayout());
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         btnPrimeiro.setFont(new java.awt.Font("Ubuntu", 0, 20)); // NOI18N
         btnPrimeiro.setText("Primeiro");
@@ -209,7 +210,7 @@ public class FormGenero extends javax.swing.JDialog {
 
         jTabbedPane1.addTab("Dados", jPanel1);
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         btnNovo.setFont(new java.awt.Font("Ubuntu", 0, 20)); // NOI18N
         btnNovo.setText("Novo");
@@ -269,18 +270,30 @@ public class FormGenero extends javax.swing.JDialog {
         bindingGroup.addBinding(binding);
 
         cbxTipoPublico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cbxTipoPublico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Infantil", "InfantoJuvenil", "\"Adulto\"" }));
+        cbxTipoPublico.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Infantil", "InfantoJuvenil", "\"Adulto\"" }));
         cbxTipoPublico.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Público Alvo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblGeneros, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.pbAlvo}"), cbxTipoPublico, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
+        cbxTipoPublico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxTipoPublicoActionPerformed(evt);
+            }
+        });
+
         cbxIdadePublico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cbxIdadePublico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "04 - 10", "12 - 16", "+18" }));
+        cbxIdadePublico.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "04 - 10", "12 - 16", "+18" }));
         cbxIdadePublico.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Idade Público", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblGeneros, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.agePublico}"), cbxIdadePublico, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
+
+        cbxIdadePublico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxIdadePublicoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -291,26 +304,26 @@ public class FormGenero extends javax.swing.JDialog {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(txtTipoGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
                         .addComponent(cbxIdadePublico, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(txtCodGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cbxTipoPublico, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbxTipoPublico, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(53, 53, 53))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtCodGenero)
-                    .addComponent(cbxTipoPublico, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(57, 57, 57)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCodGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbxTipoPublico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(54, 54, 54)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTipoGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbxIdadePublico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -424,6 +437,16 @@ public class FormGenero extends javax.swing.JDialog {
             dialogPai.atualizaTabela();
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void cbxTipoPublicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTipoPublicoActionPerformed
+        // TODO add your handling code here:
+        cbxIdadePublico.setSelectedIndex(cbxTipoPublico.getSelectedIndex());
+    }//GEN-LAST:event_cbxTipoPublicoActionPerformed
+
+    private void cbxIdadePublicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxIdadePublicoActionPerformed
+        // TODO add your handling code here:
+        cbxTipoPublico.setSelectedIndex(cbxIdadePublico.getSelectedIndex());
+    }//GEN-LAST:event_cbxIdadePublicoActionPerformed
 
     /**
      * @param args the command line arguments

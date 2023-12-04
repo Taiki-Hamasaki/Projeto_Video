@@ -14,7 +14,11 @@ public class Errors {
     public static String getStackTraceFormatted(Exception e) {
         String retorno = e.getMessage() + "\n";
         for(int i = 0;i<e.getStackTrace().length;i++) {
-            retorno += e.getStackTrace()[i] + "\n";
+            if(i %2 == 0) {
+                retorno += e.getStackTrace()[i] + ", ";
+            } else {
+                retorno += e.getStackTrace()[i] + "\n";
+            }
         }
         return retorno;
     }

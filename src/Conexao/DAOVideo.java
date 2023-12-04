@@ -49,6 +49,8 @@ public class DAOVideo {
     
     public boolean salvar(Video objVideo) {
         if(objVideo.getCodVideo()== null) {
+            objVideo.setNumCurtidas(0);
+            objVideo.setVisualizacoes(0);
             return incluir(objVideo);
         } else {
             return alterar(objVideo);
@@ -61,8 +63,13 @@ public class DAOVideo {
         try {
             PreparedStatement pst = Conexao.getPreparedStatement(sql);
             pst.setString(1, objVideo.getTituloVideo());
-            pst.setInt(2, objVideo.getNumCurtidas());
-            pst.setInt(3, objVideo.getVisualizacoes());
+            if(objVideo.getNumCurtidas() == null && objVideo.getVisualizacoes() == null) {
+                pst.setInt(2, 0);
+                pst.setInt(3, 0);
+            } else {
+                pst.setInt(2, objVideo.getNumCurtidas());
+                pst.setInt(3, objVideo.getVisualizacoes());
+            }
             pst.setInt(4, objVideo.getGeneroVideo().getCodGenero());
             pst.setInt(5, objVideo.getDonoVideo().getCodCanal());
             

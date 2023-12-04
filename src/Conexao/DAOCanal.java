@@ -21,6 +21,26 @@ import javax.swing.JOptionPane;
 public class DAOCanal {
     private  DAOUsuario daoUsuario = new DAOUsuario();
     
+    public List<Canal> getLista() {
+        String sql = "SELECT C.codCanal, C.nomeCanal, C.descricaoCanal, U.codusuario FROM canal AS C INNER JOIN channelowner AS CO INNER JOIN usuario AS U WHERE C.codCanal = CO.canal_codCanal AND U.codusuario = CO.usuario_codusuario";
+        List<Canal> listaCanal = new ArrayList<>();
+        try {
+            PreparedStatement pst = Conexao.getPreparedStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()) {
+                Canal objCanal = new Canal();
+                objCanal.setCodCanal(rs.getInt("codCanal"));
+                objCanal.setNomeCanal(rs.getString("nomeCanal"));
+                objCanal.setDescricaoCanal(rs.getString("descricaoCanal"));
+                objCanal.setDonoCanal(daoUsuario.localizar(rs.getInt("codUsuario")));
+                listaCanal.add(objCanal);
+            }
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro de SQL no método getLista() na classe DAOCanal\n" + Errors.getStackTraceFormatted(e));
+        }
+        return listaCanal;
+    }
+    
     public  List<Canal> getLista(int id) {
         String sql = "SELECT C.codCanal, C.nomeCanal, C.descricaoCanal, U.codusuario FROM canal AS C INNER JOIN channelowner AS CO INNER JOIN usuario AS U WHERE C.codCanal = CO.canal_codCanal AND U.codusuario = CO.usuario_codusuario AND U.codUsuario = ?";
         List<Canal> listaCanal = new ArrayList<>();
@@ -38,7 +58,7 @@ public class DAOCanal {
                 listaCanal.add(objCanal);
             }
         } catch(SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro de SQL no método getLista na classe DAOCanal\n" + Errors.getStackTraceFormatted(e));
+            JOptionPane.showMessageDialog(null, "Erro de SQL no método getLista(int id) na classe DAOCanal\n" + Errors.getStackTraceFormatted(e));
         }
         return listaCanal;
     }

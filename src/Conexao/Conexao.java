@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -50,7 +51,7 @@ public class Conexao {
             con = getConexao();
         }
         try {
-            return con.prepareStatement(sqlCommand);
+            return con.prepareStatement(sqlCommand, Statement.RETURN_GENERATED_KEYS);
         } catch(SQLException e) {
             System.out.println("Erro de SQL: " + e.getMessage());
         }

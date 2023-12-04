@@ -142,12 +142,12 @@ public class FormVideo extends javax.swing.JDialog {
         jPanel6 = new javax.swing.JPanel();
         txtCodVideo = new javax.swing.JTextField();
         txtTituloVideo = new javax.swing.JTextField();
-        cbxGeneros = new javax.swing.JComboBox<>();
+        cbxGeneros = new javax.swing.JComboBox<String>();
         jLabel1 = new javax.swing.JLabel();
-        cbxCanal = new javax.swing.JComboBox<>();
+        cbxCanal = new javax.swing.JComboBox<String>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Novo Usuário");
+        setTitle("Novo Vídeo");
 
         jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
@@ -320,9 +320,12 @@ public class FormVideo extends javax.swing.JDialog {
         txtCodVideo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cod Video", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
         txtCodVideo.setEnabled(false);
 
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblVideos, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.codVideo}"), txtCodVideo, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         txtTituloVideo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Título do Vídeo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblVideos, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.nomeCanal}"), txtTituloVideo, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblVideos, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.tituloVideo}"), txtTituloVideo, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         cbxGeneros.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Genero do Vídeo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -459,7 +462,7 @@ public class FormVideo extends javax.swing.JDialog {
         if(validaCampos()) {
             int linhaSelecionada = tblVideos.getSelectedRow();
             Video video = listVideos.get(linhaSelecionada);
-            daoVideo.incluir(video);
+            daoVideo.salvar(video);
             atualizaTabela();
             trataEdicao(false);
         }
