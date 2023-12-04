@@ -44,9 +44,9 @@ CREATE TABLE IF NOT EXISTS `auditoria` (
   `dataHora` datetime DEFAULT NULL,
   `usuario` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`codAuditoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='Registra todas as informações sobre os processos mais importantes do sistema\r\n';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Registra todas as informações sobre os processos mais importantes do sistema\r\n';
 
--- Copiando dados para a tabela plataforma_video.auditoria: ~8 rows (aproximadamente)
+-- Copiando dados para a tabela plataforma_video.auditoria: ~13 rows (aproximadamente)
 INSERT INTO `auditoria` (`codAuditoria`, `acao`, `tabela`, `dataHora`, `usuario`) VALUES
 	(1, NULL, 'usuario', '2023-10-06 10:54:54', 'root@localhost'),
 	(2, NULL, 'video', '2023-10-06 10:56:47', 'root@localhost'),
@@ -59,7 +59,8 @@ INSERT INTO `auditoria` (`codAuditoria`, `acao`, `tabela`, `dataHora`, `usuario`
 	(9, NULL, 'usuario', '2023-11-15 22:35:42', 'root@localhost'),
 	(10, 'Senha do Usuário Taiki Hamasaki alterado para 123456789', 'usuario', '2023-11-15 22:38:17', 'root@localhost'),
 	(11, NULL, 'usuario', '2023-11-19 01:12:27', 'root@localhost'),
-	(12, NULL, 'usuario', '2023-11-19 11:35:46', 'root@localhost');
+	(12, NULL, 'usuario', '2023-11-19 11:35:46', 'root@localhost'),
+	(14, NULL, 'video', '2023-12-03 16:44:05', 'root@localhost');
 
 -- Copiando estrutura para tabela plataforma_video.canal
 DROP TABLE IF EXISTS `canal`;
@@ -68,12 +69,18 @@ CREATE TABLE IF NOT EXISTS `canal` (
   `nomeCanal` varchar(200) NOT NULL,
   `descricaoCanal` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`codCanal`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela plataforma_video.canal: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela plataforma_video.canal: ~7 rows (aproximadamente)
 INSERT INTO `canal` (`codCanal`, `nomeCanal`, `descricaoCanal`) VALUES
 	(1, 'Joãozinho Gameplays 6M', 'Sou João Bosco e rumo aos 6 milhões'),
-	(2, 'TESTECANAL', NULL);
+	(2, 'TESTECANAL', NULL),
+	(5, 'Joãozinho Gameplays 6M', 'Sou João Bosco e rumo aos 6 milhões'),
+	(6, 'Taiki Hamasaki', NULL),
+	(7, 'Taiki', NULL),
+	(8, 'Teste 002', NULL),
+	(9, 'Teste 003', NULL),
+	(10, 'T. Hamasaki', NULL);
 
 -- Copiando estrutura para tabela plataforma_video.channelowner
 DROP TABLE IF EXISTS `channelowner`;
@@ -87,10 +94,13 @@ CREATE TABLE IF NOT EXISTS `channelowner` (
   CONSTRAINT `fk_canal_has_usuario_usuario1` FOREIGN KEY (`usuario_codusuario`) REFERENCES `usuario` (`codusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela plataforma_video.channelowner: ~3 rows (aproximadamente)
+-- Copiando dados para a tabela plataforma_video.channelowner: ~5 rows (aproximadamente)
 INSERT INTO `channelowner` (`canal_codCanal`, `usuario_codusuario`) VALUES
 	(1, 1),
-	(2, 3);
+	(2, 3),
+	(6, 4),
+	(7, 4),
+	(10, 4);
 
 -- Copiando estrutura para tabela plataforma_video.comprarfilmes
 DROP TABLE IF EXISTS `comprarfilmes`;
@@ -116,28 +126,37 @@ CREATE TABLE IF NOT EXISTS `genero` (
   `tipoPublico` enum('Infantil','InfantoJuvenil','"Adulto"') DEFAULT NULL,
   `idadePublico` enum('04 - 10','12 - 16','+18') DEFAULT NULL,
   PRIMARY KEY (`codGenero`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela plataforma_video.genero: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela plataforma_video.genero: ~4 rows (aproximadamente)
 INSERT INTO `genero` (`codGenero`, `tipoGenero`, `tipoPublico`, `idadePublico`) VALUES
-	(1, 'Gameplays', 'InfantoJuvenil', '');
+	(1, 'Gameplays', 'InfantoJuvenil', ''),
+	(2, 'Maquiagem', 'InfantoJuvenil', '12 - 16'),
+	(3, 'Moda', 'InfantoJuvenil', '12 - 16'),
+	(4, 'Jogos Violentos', 'InfantoJuvenil', '12 - 16');
 
--- Copiando estrutura para tabela plataforma_video.parcerias
-DROP TABLE IF EXISTS `parcerias`;
-CREATE TABLE IF NOT EXISTS `parcerias` (
-  `codParcerias` int(11) NOT NULL AUTO_INCREMENT,
+-- Copiando estrutura para tabela plataforma_video.parceria
+DROP TABLE IF EXISTS `parceria`;
+CREATE TABLE IF NOT EXISTS `parceria` (
+  `codParceria` int(11) NOT NULL AUTO_INCREMENT,
   `nomeEmpresa` varchar(150) NOT NULL,
   `inicioContrato` date NOT NULL,
   `fimContrato` date NOT NULL,
   `canal_codCanal` int(11) NOT NULL,
-  PRIMARY KEY (`codParcerias`,`canal_codCanal`),
+  PRIMARY KEY (`codParceria`,`canal_codCanal`) USING BTREE,
   KEY `fk_parcerias_canal1_idx` (`canal_codCanal`),
   CONSTRAINT `fk_parcerias_canal1` FOREIGN KEY (`canal_codCanal`) REFERENCES `canal` (`codCanal`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela plataforma_video.parcerias: ~0 rows (aproximadamente)
-INSERT INTO `parcerias` (`codParcerias`, `nomeEmpresa`, `inicioContrato`, `fimContrato`, `canal_codCanal`) VALUES
-	(1, 'Adidas', '2023-09-11', '2024-09-11', 1);
+-- Copiando dados para a tabela plataforma_video.parceria: ~7 rows (aproximadamente)
+INSERT INTO `parceria` (`codParceria`, `nomeEmpresa`, `inicioContrato`, `fimContrato`, `canal_codCanal`) VALUES
+	(1, 'Adidas', '2023-09-11', '2024-09-11', 1),
+	(2, 'Nike', '2023-12-03', '2024-12-03', 1),
+	(3, 'Puma', '2023-12-06', '2023-12-06', 1),
+	(4, 'Kabum', '2024-01-12', '2024-01-12', 6),
+	(5, 'Kabum', '2024-01-12', '2024-01-12', 7),
+	(6, 'Ubisoft', '2023-02-12', '2023-02-12', 6),
+	(7, 'NetShoes', '2024-01-10', '2024-01-10', 1);
 
 -- Copiando estrutura para procedure plataforma_video.proc_alteraCanal
 DROP PROCEDURE IF EXISTS `proc_alteraCanal`;
@@ -411,12 +430,13 @@ CREATE TABLE IF NOT EXISTS `video` (
   KEY `fk_video_canal1_idx` (`canal_codCanal`),
   CONSTRAINT `fk_video_canal1` FOREIGN KEY (`canal_codCanal`) REFERENCES `canal` (`codCanal`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_video_genero1` FOREIGN KEY (`genero_codCategoria`) REFERENCES `genero` (`codGenero`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela plataforma_video.video: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela plataforma_video.video: ~3 rows (aproximadamente)
 INSERT INTO `video` (`codVideo`, `tituloVideo`, `numeroCurtidas`, `visualizacoes`, `genero_codCategoria`, `canal_codCanal`) VALUES
 	(1, 'Usando a estratégia da cama para matar o ender dragon - Joãozinho Gameplays', NULL, NULL, 1, 1),
-	(4, 'VLOG #03', NULL, NULL, 1, 1);
+	(4, 'VLOG #03', NULL, NULL, 1, 1),
+	(5, 'Far Cry #03 - Taiki Hamasaki', 0, 0, 4, 6);
 
 -- Copiando estrutura para trigger plataforma_video.tri_alteraUsuario
 DROP TRIGGER IF EXISTS `tri_alteraUsuario`;
